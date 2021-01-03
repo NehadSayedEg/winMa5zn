@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Ma5zn</string>
+
+
+    <string name="barcode_et">Enter Barcode</string>
+
+    <string name="amount_et">Enter amount</string>
+    <string name="save_btn">Save</string>
+    <string name="cancel_btn">Clear</string>
+    <string name="search_et">Search</string>
+
+
+
+    <string name="sheetname_et">Sheet Name</string>
+
+
+
+
+</resources>
