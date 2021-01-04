@@ -1,10 +1,12 @@
-package com.nehad.wininventory;
+package com.nehad.wininventory.UI.ScanActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.nehad.wininventory.R;
 
 public class ScanActivity extends AppCompatActivity {
     ImageView back_btn ;

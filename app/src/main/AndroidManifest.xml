@@ -11,8 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WinInventory">
-        <activity android:name=".ScanActivity"></activity>
-        <activity android:name=".FilesActivity" >
+        <activity android:name=".UI.ScanActivity.ScanActivity"></activity>
+        <activity android:name=".UI.FilesActivity.FilesActivity" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

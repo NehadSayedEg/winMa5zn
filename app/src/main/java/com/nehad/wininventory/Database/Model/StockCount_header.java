@@ -24,7 +24,7 @@ public class StockCount_header implements Serializable {
 
 
     @ColumnInfo(name = "document_date")
-    private int documentDate ;
+    private String documentDate ;
 
     @ColumnInfo(name = "document_status")
     private int  documentStatus ;
@@ -32,7 +32,7 @@ public class StockCount_header implements Serializable {
     public StockCount_header() {
     }
 
-    public StockCount_header(int documentNo, @NonNull String fileName, int documentDate, int documentStatus) {
+    public StockCount_header(int documentNo, @NonNull String fileName, String documentDate, int documentStatus) {
         this.documentNo = documentNo;
         this.fileName = fileName;
         this.documentDate = documentDate;
@@ -56,11 +56,11 @@ public class StockCount_header implements Serializable {
         this.fileName = fileName;
     }
 
-    public int getDocumentDate() {
+    public String getDocumentDate() {
         return documentDate;
     }
 
-    public void setDocumentDate(int documentDate) {
+    public void setDocumentDate(String documentDate) {
         this.documentDate = documentDate;
     }
 
