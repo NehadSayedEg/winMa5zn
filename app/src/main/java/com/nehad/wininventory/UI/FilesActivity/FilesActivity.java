@@ -22,6 +22,7 @@ import com.nehad.wininventory.R;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,10 +60,9 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
         addfile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               addDialog();
+                addDialog();
             }
         });
-
 
 
     }
@@ -77,10 +77,11 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
             @Override
             protected void onPostExecute( List<StockCount_header> stockCountHeaders) {
                 super.onPostExecute(stockCountHeaders);
-//                Log.d("mysheets", stockCountHeaderList.size()+ "size ");
                 if(stockCountHeaderList.size() == 0){
                     stockCountHeaderList.addAll(stockCountHeaders);
                     filesAdapter.notifyDataSetChanged();
+                    // Log.d("mysheets", stockCountHeaderList.get(1).getDocumentNo() + "size ");
+
                 }else {
                     stockCountHeaderList.add(0 ,stockCountHeaders.get(0));
                     filesAdapter.notifyItemInserted(0);
@@ -95,9 +96,10 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_OK &&  requestCode == Request_code){
+        if(requestCode == RESULT_OK ){
+            getSheets();
 
-        }
+       }
     }
 
     private void addDialog() {
@@ -112,7 +114,8 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
         Log.e(" sheet name " +sheetName , " files activity");
 
         String sheetDate  =  new
-                SimpleDateFormat("EEEE , dd MMMMM yyyyy  HH:mm a" , Locale.getDefault()).toString();
+                SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a" , Locale.getDefault()).format(new Date()).toString();
+        Log.e("date" , sheetDate);
 
         final StockCount_header stockCount_header = new StockCount_header();
         stockCount_header.setFileName(sheetName);
@@ -124,11 +127,20 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
 
 
             @Override
-            protected Void doInBackground(Void... voids) {
-                appDatabase.getInstance(getApplicationContext()).stockHeaderDao().insertSheet(stockCount_header);
-                return null;
+            protected Void doInBackground(Void... objs) {
+                // retrieve auto incremented note id
+                long j = appDatabase.getInstance(getApplicationContext()).stockHeaderDao().insertSheet(stockCount_header);
+                stockCount_header.setDocumentNo(j);
 
+                Log.e("ID ", "doInBackground: " + j);
+                return null;
             }
+          //  @Override
+//            protected Void doInBackground(Void... voids) {
+//                appDatabase.getInstance(getApplicationContext()).stockHeaderDao().insertSheet(stockCount_header);
+//                return null;
+//
+//            }
 
             @Override
             protected void onPostExecute(Void aVoid) {

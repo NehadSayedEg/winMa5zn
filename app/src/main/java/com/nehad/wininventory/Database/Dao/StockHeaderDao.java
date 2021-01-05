@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import com.nehad.wininventory.Database.Model.StockCount_header;
 import com.nehad.wininventory.Database.Model.StockDetail;
@@ -14,9 +15,16 @@ import java.util.List;
 @Dao
 public interface StockHeaderDao {
 
-
+//
+//    @Insert(onConflict = OnConflictStrategy.IGNORE)
+//    void  insertSheet(StockCount_header stockCount_header);
+@Transaction
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void  insertSheet(StockCount_header stockCount_header);
+    long  insertSheet(StockCount_header stockCount_header);
+
+
+    @Insert
+    void insertStockDetails(List<StockDetail> stockDetailList);
 
 //    @Update
 //    void  updateItem(Item item);

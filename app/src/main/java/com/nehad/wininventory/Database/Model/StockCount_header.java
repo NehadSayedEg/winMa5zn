@@ -12,10 +12,10 @@ import java.text.DateFormat;
 
 public class StockCount_header implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+        @PrimaryKey(autoGenerate = true)
         @NonNull
         @ColumnInfo(name = "document_number")
-        private int  documentNo ;
+        private long  documentNo ;
 
 //    @PrimaryKey(autoGenerate = false)
 //    @NonNull
@@ -32,18 +32,18 @@ public class StockCount_header implements Serializable {
     public StockCount_header() {
     }
 
-    public StockCount_header(int documentNo, @NonNull String fileName, String documentDate, int documentStatus) {
+    public StockCount_header(long documentNo, @NonNull String fileName, String documentDate, int documentStatus) {
         this.documentNo = documentNo;
         this.fileName = fileName;
         this.documentDate = documentDate;
         this.documentStatus = documentStatus;
     }
 
-    public int getDocumentNo() {
+    public long getDocumentNo() {
         return documentNo;
     }
 
-    public void setDocumentNo(int documentNo) {
+    public void setDocumentNo(long documentNo) {
         this.documentNo = documentNo;
     }
 

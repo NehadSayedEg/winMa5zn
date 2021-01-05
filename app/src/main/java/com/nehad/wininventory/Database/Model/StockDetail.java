@@ -3,6 +3,7 @@ package com.nehad.wininventory.Database.Model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -13,39 +14,42 @@ public class StockDetail implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "id")
-    private int id ;
+    @ColumnInfo(name = "id_stock_details")
+    private long id ;
 
-//        @PrimaryKey(autoGenerate = false)
-//        @NonNull
-        @ColumnInfo(name = "barcode")
-        private String barcode ;
-//
-//    @PrimaryKey(autoGenerate = false)
-//    @NonNull
+    @ForeignKey
+            (entity = StockCount_header.class,
+                    parentColumns = "document_number", childColumns = "document_number")
+
+
+
+
+    @ColumnInfo(name = "barcode")
+    private String barcode ;
+
     @ColumnInfo(name = "document_number")
-    private int documentNumber ;
+    private long documentNumber ;
 
 
         @ColumnInfo(name = "qty")
         private float qty ;
 
+//
+//    public StockDetail() {
+//    }
 
-    public StockDetail() {
-    }
-
-    public StockDetail(int id, @NonNull String barcode, int documentNumber, float qty) {
+    public StockDetail(long id, @NonNull String barcode, long documentNumber, float qty) {
         this.id = id;
         this.barcode = barcode;
         this.documentNumber = documentNumber;
         this.qty = qty;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -58,11 +62,11 @@ public class StockDetail implements Serializable {
         this.barcode = barcode;
     }
 
-    public int getDocumentNumber() {
+    public long getDocumentNumber() {
         return documentNumber;
     }
 
-    public void setDocumentNumber(int documentNumber) {
+    public void setDocumentNumber(long documentNumber) {
         this.documentNumber = documentNumber;
     }
 
