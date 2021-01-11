@@ -12,18 +12,17 @@ import java.io.Serializable;
 @Entity(tableName = "Stock_detail_table")
 public class StockDetail implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
-    @ColumnInfo(name = "id_stock_details")
-    private long id ;
+//    @PrimaryKey (autoGenerate = true)
+//    @NonNull
+//    @ColumnInfo(name = "id_stock_details")
+//    private long id ;
 
     @ForeignKey
             (entity = StockCount_header.class,
-                    parentColumns = "document_number", childColumns = "document_number")
-
-
-
-
+                    parentColumns = "document_number",
+                    childColumns = "document_number")
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "barcode")
     private String barcode ;
 
@@ -31,27 +30,27 @@ public class StockDetail implements Serializable {
     private long documentNumber ;
 
 
-        @ColumnInfo(name = "qty")
-        private float qty ;
+    @ColumnInfo(name = "qty")
+    private float qty ;
 
-//
-//    public StockDetail() {
-//    }
 
-    public StockDetail(long id, @NonNull String barcode, long documentNumber, float qty) {
-        this.id = id;
+    public StockDetail( @NonNull String barcode, long documentNumber, float qty) {
         this.barcode = barcode;
         this.documentNumber = documentNumber;
         this.qty = qty;
     }
 
-    public long getId() {
-        return id;
+    public StockDetail() {
+
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+//    public long getId() {
+//        return id;
+//    }
+//
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 
     @NonNull
     public String getBarcode() {
@@ -82,7 +81,7 @@ public class StockDetail implements Serializable {
     @Override
     public String toString() {
         return "StockDetail{" +
-                "id=" + id +
+//                "id=" + id +
                 ", barcode='" + barcode + '\'' +
                 ", documentNumber=" + documentNumber +
                 ", qty=" + qty +

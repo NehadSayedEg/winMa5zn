@@ -56,5 +56,8 @@ dependencies {
 //scabale size unit
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
 
+    implementation 'com.github.prabhat1707:DbExporterHelper:v1.0'
+
+
 
 }

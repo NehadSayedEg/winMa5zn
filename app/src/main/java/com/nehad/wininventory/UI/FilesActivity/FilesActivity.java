@@ -51,11 +51,6 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
         filesRecyclerView.setAdapter(filesAdapter);
 
 
-
-
-
-
-
         getSheets();
         addfile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +59,11 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
             }
         });
 
+
+        filesAdapter.notifyDataSetChanged();
+//        stockCountHeaderList.add(s)
+        int  index = stockCountHeaderList.size();
+        filesAdapter.notifyItemInserted(index);
 
     }
 
@@ -120,6 +120,10 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
         final StockCount_header stockCount_header = new StockCount_header();
         stockCount_header.setFileName(sheetName);
         stockCount_header.setDocumentDate(sheetDate);
+        filesAdapter.notifyDataSetChanged();
+     stockCountHeaderList.add(stockCount_header);
+        int  index = stockCountHeaderList.size();
+        filesAdapter.notifyItemInserted(index);
 
 
         @SuppressLint("StaticFieldLeak")
@@ -133,6 +137,9 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
                 stockCount_header.setDocumentNo(j);
 
                 Log.e("ID ", "doInBackground: " + j);
+
+
+
                 return null;
             }
           //  @Override
@@ -148,10 +155,13 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
                 Intent intent = new Intent();
                 setResult(RESULT_OK,intent);
                 //finish();
+
+
             }
         }
         
       new SaveSheetAsyncTask().execute();
+
 
     }
 

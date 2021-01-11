@@ -11,12 +11,28 @@ public class HeaderWithDetails {
     public StockCount_header stockCount_header;
     @Relation(
             parentColumn = "document_number",
-            entityColumn = "barcode"
+            entityColumn = "document_number" , entity = StockDetail.class
     )
-    public List<StockDetail> stockDetailList;
+    public List<StockDetail> stockDetail;
 
-    public HeaderWithDetails(StockCount_header stockCount_header, List<StockDetail> stockDetailList) {
+    public HeaderWithDetails(StockCount_header stockCount_header, List<StockDetail> stockDetail) {
         this.stockCount_header = stockCount_header;
-        this.stockDetailList = stockDetailList;
+        this.stockDetail = stockDetail;
+    }
+
+    public StockCount_header getStockCount_header() {
+        return stockCount_header;
+    }
+
+    public void setStockCount_header(StockCount_header stockCount_header) {
+        this.stockCount_header = stockCount_header;
+    }
+
+    public List<StockDetail> getStockDetail() {
+        return stockDetail;
+    }
+
+    public void setStockDetail(List<StockDetail> stockDetail) {
+        this.stockDetail = stockDetail;
     }
 }

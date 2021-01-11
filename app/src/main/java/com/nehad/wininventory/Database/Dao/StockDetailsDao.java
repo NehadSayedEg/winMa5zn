@@ -14,31 +14,6 @@ import java.util.List;
 
 public interface StockDetailsDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void  insertItem(StockDetail stockDetail);
 
-//    @Update
-//    void  updateItem(Item item);
-
-
-    @Query("UPDATE stock_detail_table  SET  qty = :qty  WHERE  document_number = :document_number AND barcode  = :barcode")
-    void  updateItem(String barcode  , float qty, int  document_number);
-
-
-
-//    @Query("UPDATE item_table  SET  amount = :amount ")
-//    void  updateItem( float amount);
-
-    @Delete
-    void  deleteItem(StockDetail stockDetail);
-
-    @Query("SELECT * FROM  Stock_detail_table")
-    List<StockDetail> getAllItems();
-
-    @Query("SELECT * FROM  stock_detail_table   ORDER By  id DESC")
-    List<StockDetail> getArrangedItems();
-
-    @Delete
-    void deleteAllItems(List<StockDetail> stockDetailList);
 
 }
