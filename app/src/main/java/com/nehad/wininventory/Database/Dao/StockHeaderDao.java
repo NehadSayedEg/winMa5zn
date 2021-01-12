@@ -50,7 +50,11 @@ public interface StockHeaderDao {
     @Query("SELECT * FROM  Stock_detail_table  WHERE  document_number = :document_number ")
     List<StockDetail> getAllItems(long  document_number);
 
-   @Insert
+    @Query("SELECT * FROM  stock_count_header_table   WHERE  document_number = :document_number")
+    public List<HeaderWithDetails> getAllItemsDetials(long  document_number);
+
+
+    @Insert
     long  insertSheetHeader(StockCount_header stockCount_header);
     @Insert
     long insertStockItemDetail(StockDetail stockDetail);

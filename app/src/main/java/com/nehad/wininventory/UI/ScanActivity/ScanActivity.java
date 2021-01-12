@@ -1,6 +1,7 @@
 package com.nehad.wininventory.UI.ScanActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -10,6 +11,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,18 +25,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.dbexporterlibrary.ExportDbUtil;
+import com.android.dbexporterlibrary.ExporterListener;
 import com.nehad.wininventory.Database.Model.HeaderWithDetails;
 import com.nehad.wininventory.Database.Model.StockCount_header;
 import com.nehad.wininventory.Database.Model.StockDetail;
 import com.nehad.wininventory.Database.appDatabase;
 import com.nehad.wininventory.R;
+import com.opencsv.CSVReader;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 import static java.lang.Float.valueOf;
 
@@ -48,6 +60,8 @@ public class ScanActivity extends AppCompatActivity {
     private ScanAdapter  scanAdapter ;
     Activity activity ;
     Context context ;
+    private ExportDbUtil exportDbUtil;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +75,17 @@ public class ScanActivity extends AppCompatActivity {
 
         scanRecyclerView = findViewById(R.id.scanrv);
 
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         scanRecyclerView.setHasFixedSize(true);
         scanRecyclerView.setLayoutManager(layoutManager);
         scanRecyclerView.scrollToPosition(0);
-//        scanRecyclerView.setLayoutManager(new
-//                StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-
         stockDetailList = new ArrayList<>();
         scanAdapter = new ScanAdapter(stockDetailList ,activity  ,context);
         scanRecyclerView.setAdapter(scanAdapter);
+
 
 
         if (getIntent().getExtras() != null) {
@@ -85,10 +98,15 @@ public class ScanActivity extends AppCompatActivity {
         attach_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                exportDB();
+
+
+         exportDB();
 
             }
         });
+
+
+
 
 
         barcodeEt.addTextChangedListener(new TextWatcher() {
@@ -119,27 +137,67 @@ public class ScanActivity extends AppCompatActivity {
     }
 
 
-//    private void exportDB(){
-//        String DatabaseName = "Sycrypter.db";
-//        File sd = Environment.getExternalStorageDirectory();
-//        File data = Environment.getDataDirectory();
-//        FileChannel source=null;
-//        FileChannel destination=null;
-//        String currentDBPath = "/data/"+ "com.synnlabz.sycryptr" +"/databases/"+DatabaseName ;
-//        String backupDBPath = SAMPLE_DB_NAME;
-//        File currentDB = new File(data, currentDBPath);
-//        File backupDB = new File(sd, backupDBPath);
+
+
+
+    private void exportDB(){
+
+
+     try {
+         //saving the file into device
+
+         FileOutputStream out = openFileOutput("ma5zn.csv", Context.MODE_PRIVATE);
+         long docNo = stockCount_header.getDocumentNo();
+         List<StockDetail> stockDetailList = appDatabase.getInstance(getApplicationContext()).stockHeaderDao()
+                 .getAllItems(docNo);
+         for( int i =0 ;  i<stockDetailList.size() ; i++)
+                {
+                    out.write( stockDetailList.get(i).getBarcode().getBytes());
+                    out.write((int) stockDetailList.get(i).getDocumentNumber());
+                    out.write((int) stockDetailList.get(i).getQty());
+                }
+
+
+
+         out.write(appDatabase.getInstance(getApplicationContext()).stockHeaderDao().getAllItemsDetials(docNo).toString().getBytes());
+//         out.write(database.itemDao().getAllItems().toString().getBytes());
+
+         out.close();
+
+
+         Context context = getApplicationContext();
+         File filelocation = new File(getFilesDir(), "ma5zn.csv");
+         Uri path = FileProvider.getUriForFile(context, "com.nehad.wininventory.fileprovider", filelocation);
+
+         //exporting
+         Intent fileIntent = new Intent(Intent.ACTION_SEND);
+         fileIntent.setType("text/csv");
+         fileIntent.putExtra(Intent.EXTRA_SUBJECT, "Data");
+         fileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+         fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+
+         fileIntent.putExtra(Intent.EXTRA_STREAM, path);
+         startActivity(Intent.createChooser(fileIntent, "Send mail"));
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
+
 //        try {
-//            source = new FileInputStream(currentDB).getChannel();
-//            destination = new FileOutputStream(backupDB).getChannel();
-//            destination.transferFrom(source, 0, source.size());
-//            source.close();
-//            destination.close();
-//            Toast.makeText(this, "Your Database is Exported !!", Toast.LENGTH_LONG).show();
-//        } catch(IOException e) {
+//            File csvfile = new File(Environment.getExternalStorageDirectory() + "/csvfile.csv");
+//            CSVReader reader = new CSVReader(new FileReader(csvfile.getAbsolutePath()));
+//            String[] nextLine;
+//            while ((nextLine = reader.readNext()) != null) {
+//                // nextLine[] is an array of values from the line
+//                System.out.println(nextLine[0] + nextLine[1] + "etc...");
+//            }
+//        } catch (Exception e) {
 //            e.printStackTrace();
+//            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 //        }
-//    }
+
+    }
+
 
 
 
