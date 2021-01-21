@@ -10,8 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.nehad.wininventory.AddSheetDialog;
@@ -29,6 +32,7 @@ import java.util.Locale;
 public class FilesActivity extends AppCompatActivity implements AddSheetDialog.addSheetListener {
     Context context ;
     ImageView addfile_btn ;
+    EditText search_input ;
 
 
     private DateFormat dateFormat ;
@@ -40,11 +44,11 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_activity);
-
+        search_input = findViewById(R.id.search_input);
         addfile_btn = findViewById(R.id.addfile_btn);
         filesRecyclerView = findViewById(R.id.files_rv);
         filesRecyclerView.setLayoutManager(new
-           StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         stockCountHeaderList = new ArrayList<>();
         filesAdapter = new FilesAdapter(stockCountHeaderList);
@@ -52,6 +56,33 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
 
 
         getSheets();
+
+
+        search_input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                search_input.setFocusable(true);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                filesAdapter.cancelTimer();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if(stockCountHeaderList.size() != 0){
+                    filesAdapter.SearchFiles(s.toString());
+
+                }
+
+            }
+        });
+
+
         addfile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +98,7 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
 
     }
 
-     private void  getSheets(){
+    private void  getSheets(){
         class GetSheetsAsyncTask extends  AsyncTask<Void ,Void , List<StockCount_header>>{
 
             @Override
@@ -91,7 +122,8 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
         }
 
         new GetSheetsAsyncTask().execute();
-     }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -106,8 +138,6 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
         AddSheetDialog addSheetDialog = new AddSheetDialog();
         addSheetDialog.show(getSupportFragmentManager() , "Add Dialog");
     }
-
-
 
     @Override
     public void applyText(String sheetName) {
@@ -124,6 +154,7 @@ public class FilesActivity extends AppCompatActivity implements AddSheetDialog.a
      stockCountHeaderList.add(stockCount_header);
         int  index = stockCountHeaderList.size();
         filesAdapter.notifyItemInserted(index);
+
 
 
         @SuppressLint("StaticFieldLeak")

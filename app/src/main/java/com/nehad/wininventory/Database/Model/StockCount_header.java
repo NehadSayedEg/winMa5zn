@@ -17,8 +17,7 @@ public class StockCount_header implements Serializable {
         @ColumnInfo(name = "document_number")
         private long  documentNo ;
 
-//    @PrimaryKey(autoGenerate = false)
-//    @NonNull
+
     @ColumnInfo(name = "file_name")
     private String  fileName ;
 

@@ -1,12 +1,15 @@
 package com.nehad.wininventory.UI.ScanActivity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +25,7 @@ import com.nehad.wininventory.R;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHolder>{
     List<StockDetail> stockDetailList ;
@@ -45,9 +49,10 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
     @NonNull
     @Override
     public ScanAdapter.ScanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ScanAdapter.ScanViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.scan_item, parent,false));
-
+        View  v;
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.scan_item, parent,false);
+         final  ScanViewHolder  scanViewHolder  = new ScanViewHolder(v);
+        return scanViewHolder ;
 
     }
 
@@ -55,8 +60,8 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
     public void onBindViewHolder(@NonNull ScanAdapter.ScanViewHolder holder, int position) {
         database = appDatabase.getInstance(activity);
 
-        holder.setSheets(stockDetailList.get(position));
-        holder.sheetNameTV.setText(stockDetailList.get(position).getBarcode());
+        holder.setSheets(stockDetailList.get(holder.getAdapterPosition()));
+        holder.sheetNameTV.setText(stockDetailList.get(holder.getAdapterPosition()).getBarcode());
         final String sheetData = holder.sheetNameTV.getText().toString();
 
         holder.ivInc.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +75,9 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
                 LinearLayout linearLayout = new LinearLayout(v.getContext());
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 final EditText valueET = new EditText(v.getContext());
-                valueET.setHint(" Enter the value to want to subtract ");
-                valueET.setInputType(DecimalFormat.INTEGER_FIELD);
+                valueET.setHint(" Enter the value to want to add ");
+                valueET.setInputType(InputType.TYPE_CLASS_NUMBER);
+
 
                 final  TextView barcodeTv = new TextView(v.getContext());
                 barcodeTv.setText(stockDetailList.get(position).getBarcode());
@@ -92,15 +98,17 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
                                 long docNo = stockDetail.getDocumentNumber();
                                 float updateQty =  Float.valueOf(valueET.getText().toString());
                                 float newValue =  stockDetail.getQty() + updateQty ;
+                                int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+                                  int updateDate = seconds;
                                 String qty = String.valueOf(newValue);
-                                database.stockHeaderDao().updateItem( barcode ,newValue  ,docNo);
+                                database.stockHeaderDao().updateItem( barcode ,newValue  ,docNo ,updateDate);
                                 holder.sheetDate.setText(qty);
                                 stockDetailList.clear();
-                                stockDetailList.addAll(database.stockHeaderDao().getAllItems(docNo));
+                                stockDetailList.addAll(database.stockHeaderDao().getStockDetialsByDate(docNo));
                                 notifyDataSetChanged();
                                 holder.sheetDate.setText(qty);
                                 stockDetailList.clear();
-                                stockDetailList.addAll(database.stockHeaderDao().getAllItems(docNo));
+                                stockDetailList.addAll(database.stockHeaderDao().getStockDetialsByDate(docNo));
                                 notifyDataSetChanged();
 
 
@@ -129,7 +137,8 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 final EditText valueET = new EditText(v.getContext());
                 valueET.setHint(" Enter the value to want to subtract ");
-                valueET.setInputType(DecimalFormat.INTEGER_FIELD);
+                valueET.setInputType(InputType.TYPE_CLASS_NUMBER);
+
 
                 final  TextView barcodeTv = new TextView(v.getContext());
                 barcodeTv.setText(stockDetailList.get(position).getBarcode());
@@ -150,15 +159,17 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
                         long docNo = stockDetail.getDocumentNumber();
                         float updateQty =  Float.valueOf(valueET.getText().toString());
                         float newValue =  stockDetail.getQty() - updateQty ;
+                        int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+                        int updateDate = seconds;
                         String qty = String.valueOf(newValue);
-                        database.stockHeaderDao().updateItem( barcode ,newValue  ,docNo);
+                        database.stockHeaderDao().updateItem( barcode ,newValue  ,docNo ,updateDate);
                           holder.sheetDate.setText(qty);
                           stockDetailList.clear();
-                           stockDetailList.addAll(database.stockHeaderDao().getAllItems(docNo));
+                           stockDetailList.addAll(database.stockHeaderDao().getStockDetialsByDate(docNo));
                            notifyDataSetChanged();
                          holder.sheetDate.setText(qty);
                         stockDetailList.clear();
-                        stockDetailList.addAll(database.stockHeaderDao().getAllItems(docNo));
+                        stockDetailList.addAll(database.stockHeaderDao().getStockDetialsByDate(docNo));
                         notifyDataSetChanged();
 
 
@@ -169,6 +180,52 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
                         alertDialog.setCancelable(true);
                     }
                 }).show();
+
+
+            }
+        });
+
+
+        holder.ivDeleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int postion = holder.getAdapterPosition();
+                StockDetail stockDetail = stockDetailList.get(position);
+                ViewGroup parnet = (ViewGroup)v.getParent();
+//                parnet.removeView(v);
+
+
+                final  TextView barcodeTv = new TextView(v.getContext());
+                barcodeTv.setText(stockDetailList.get(position).getBarcode());
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(v.getContext());
+                alertDialog.setTitle(" Do you want  to delete this item ").setMessage("").
+                        setIcon(R.drawable.ic_baseline_add_alert_24)
+                        .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int postion = holder.getAdapterPosition();
+
+                                StockDetail stockDetail = stockDetailList.get(position);
+                                String barcode = stockDetail.getBarcode();
+                                long docNo = stockDetail.getDocumentNumber();
+                                database.stockHeaderDao().deleteItem( barcode   ,docNo);
+                                stockDetailList.clear();
+                                stockDetailList.addAll(database.stockHeaderDao().getAllItems(docNo));
+                                notifyDataSetChanged();
+                                stockDetailList.clear();
+                                stockDetailList.addAll(database.stockHeaderDao().getAllItems(docNo));
+                                notifyDataSetChanged();
+
+
+                            }
+                        }).setNegativeButton(" cancel ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.setCancelable(true);
+                    }
+                }).show();
+
+
 
 
             }
@@ -201,7 +258,7 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
             sheetId = itemView.findViewById(R.id.documentId);
             ivDec = itemView.findViewById(R.id.ivDec);
             ivInc = itemView.findViewById(R.id.ivInc);
-            ivDeleteItem = itemView.findViewById(R.id.ivDeleteItem);
+            ivDeleteItem = itemView.findViewById(R.id.ivDeleteScan);
 
         }
         void setSheets(StockDetail sheets){

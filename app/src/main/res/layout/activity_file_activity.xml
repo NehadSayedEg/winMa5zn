@@ -47,9 +47,12 @@
             android:inputType="text"
             android:textColor="@color/color3"
             android:textSize="@dimen/_15ssp"
+            android:focusableInTouchMode="true"
+
 
 
             />
+
 
     </LinearLayout>
 

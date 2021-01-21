@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,15 +22,22 @@ import com.nehad.wininventory.R;
 import com.nehad.wininventory.UI.ScanActivity.ScanActivity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FilesAdapter  extends RecyclerView.Adapter<FilesAdapter.FilesViewHolder>{
      List<StockCount_header> stockCountHeaderList ;
+    List<StockCount_header> stockCountHeaders ;
+    Timer timer ;
+
     private int selectedItem = 0;
 
 
     public FilesAdapter(List<StockCount_header> stockCountHeaderList) {
         this.stockCountHeaderList = stockCountHeaderList;
+        this.stockCountHeaders =stockCountHeaderList ;
         notifyDataSetChanged();
     }
 
@@ -115,5 +124,41 @@ public class FilesAdapter  extends RecyclerView.Adapter<FilesAdapter.FilesViewHo
 
              Log.v("sheet No" , sheets.getDocumentNo() +"sheetno");
          }
+    }
+    public void SearchFiles(final String searchKey){
+          timer = new Timer();
+         timer.schedule(new TimerTask() {
+             @Override
+             public void run() {
+                 if(searchKey.trim().isEmpty()){
+                stockCountHeaderList =stockCountHeaders ;
+                 }else{
+                     ArrayList<StockCount_header> temp = new ArrayList<>();
+                     for(StockCount_header stockCount_header : stockCountHeaders){
+
+                         if(stockCount_header.getFileName().toLowerCase().contains(searchKey.toLowerCase())){
+                             temp.add(stockCount_header);
+                         }
+                     }
+                     stockCountHeaderList = temp;
+                 }
+                 new Handler(Looper.getMainLooper()).post(new Runnable() {
+                     @Override
+                     public void run() {
+
+                         notifyDataSetChanged();
+
+                     }
+                 });
+
+             }
+         } , 500 );
+    }
+
+
+    public  void cancelTimer(){
+        if(timer != null){
+            timer.cancel();
+        }
     }
 }

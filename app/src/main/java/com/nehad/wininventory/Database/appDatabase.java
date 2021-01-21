@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.nehad.wininventory.Database.Dao.ItemDao;
 import com.nehad.wininventory.Database.Dao.StockDetailsDao;
@@ -13,7 +14,10 @@ import com.nehad.wininventory.Database.Model.Item;
 import com.nehad.wininventory.Database.Model.StockCount_header;
 import com.nehad.wininventory.Database.Model.StockDetail;
 
-@Database(entities = {Item.class , StockCount_header.class , StockDetail.class}  , version = 2 , exportSchema = false)
+
+@Database(entities = {Item.class , StockCount_header.class , StockDetail.class}  , version = 3, exportSchema = false)
+@TypeConverters({DateTypeConverter.class})
+
 public  abstract class appDatabase extends RoomDatabase {
 
     //create database instance

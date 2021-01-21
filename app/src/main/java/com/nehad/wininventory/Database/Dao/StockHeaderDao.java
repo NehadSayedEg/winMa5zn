@@ -1,48 +1,56 @@
 package com.nehad.wininventory.Database.Dao;
 
+import android.util.Log;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Transaction;
+import androidx.sqlite.db.SimpleSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.nehad.wininventory.Database.Model.HeaderWithDetails;
 import com.nehad.wininventory.Database.Model.StockCount_header;
 import com.nehad.wininventory.Database.Model.StockDetail;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
 public interface StockHeaderDao {
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long  insertSheet(StockCount_header stockCount_header);
-
-    @Query("SELECT * from stock_detail_table WHERE barcode = :barcode")
-    List<StockDetail> getItemByBarcode(String barcode);
-
-    @Query("UPDATE stock_detail_table SET qty = qty + 1 WHERE barcode = :barcode")
-    void updateQuantity(String barcode);
-
 
     @Query("UPDATE stock_detail_table SET  qty = qty + :value WHERE barcode = :barcode")
     void updateAddDialog(String barcode  , float value);
 
-    default void insertOrUpdate(StockDetail stockDetail) {
-        List<StockDetail> itemsFromDB = getItemByBarcode(stockDetail.getBarcode());
-        if (itemsFromDB.isEmpty())
-            insertStockDetails(stockDetail);
-        else{
-            updateQuantity(stockDetail.getBarcode());
-    }
-}
+    @Query("SELECT * from stock_detail_table WHERE   document_number =:document_number ORDER BY updateDate  DESC ")
+    List<StockDetail> getStockDetialsByDate(long document_number );
 
 
+    @Query("UPDATE stock_detail_table SET qty = qty + 1  ,  updateDate =:updateDate WHERE barcode = :barcode AND document_number =:document_number ")
+    void updateQuantity(String barcode ,long document_number  , int updateDate);
+//    @Query("SELECT * FROM stock_detail_table WHERE updateDate BETWEEN :from AND :to")
+//    List<User> findUsersBornBetweenDates(Date from, Date to);
 
     @Insert
-    void insertStockDetails(StockDetail stockDetailList);
+    void insertStockDetails(StockDetail stockDetail);
+
+    @Query("SELECT * from stock_detail_table WHERE barcode = :barcode   AND   document_number =:document_number  ")
+    List<StockDetail> getItemByBarcode(String barcode , long document_number );
+
+
+    default void insertOrUpdate(StockDetail stockDetail) {
+        List<StockDetail> itemsFromDB = getItemByBarcode(stockDetail.getBarcode() , stockDetail.getDocumentNumber() );
+        if (itemsFromDB.isEmpty())
+            insertStockDetails( stockDetail);
+        else{
+            updateQuantity(stockDetail.getBarcode() , stockDetail.getDocumentNumber()  , stockDetail.getUpdateDate() );
+        }
+}
 
     @Query("SELECT * FROM  stock_count_header_table")
     public List<HeaderWithDetails> getAllHeaders();
@@ -67,27 +75,12 @@ public interface StockHeaderDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void  insertItem(StockDetail stockDetail);
 
-    @Query("UPDATE stock_detail_table  SET  qty = :qty  WHERE  document_number = :document_number AND barcode  = :barcode")
-    void  updateItem(String barcode  , float qty, long  document_number);
+    @Query("UPDATE stock_detail_table  SET  qty = :qty    , updateDate = :updateDate  WHERE  document_number = :document_number AND barcode  = :barcode ")
+    void  updateItem(String barcode  , float qty, long  document_number  , int updateDate);
 
 
-
-
-    @Delete
-    void  deleteItem(StockDetail stockDetail);
-//    @Query("SELECT * FROM  Stock_detail_table")
-//    List<StockDetail> getAllItems();
-
-//    @Query("SELECT * FROM  stock_detail_table   ORDER By  id DESC")
-//    List<StockDetail> getArrangedItems();
-
-//    @Delete
-//    void deleteAllItems(List<StockDetail> stockDetailList);
-
-
-
-
-
+    @Query("DELETE FROM    stock_detail_table   WHERE document_number = :document_number AND barcode  = :barcode")
+    void  deleteItem(String barcode  , long  document_number);
 
 
     @Query("SELECT * FROM  stock_detail_table    WHERE   document_number = :document_number")
@@ -96,8 +89,6 @@ public interface StockHeaderDao {
 
 
 
-//    @Query("UPDATE stock_count_header_table  SET  qty = :qty  WHERE  document_number = :document_number AND barcode  = :barcode")
-//    void  updateItem(String barcode  , float qty, int  document_number);
 
 
 
