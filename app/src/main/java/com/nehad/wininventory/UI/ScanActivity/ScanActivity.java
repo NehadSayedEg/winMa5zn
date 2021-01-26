@@ -1,7 +1,9 @@
 package com.nehad.wininventory.UI.ScanActivity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,8 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -77,7 +81,8 @@ public class ScanActivity extends AppCompatActivity {
     private ScanAdapter  scanAdapter ;
     Activity activity ;
     Context context ;
- int scanDate  , updateDate ;
+ int updateDate ;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -85,14 +90,16 @@ public class ScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.offwhite));
+        setSupportActionBar(toolbar);
 
-        back_btn = findViewById(R.id.back_btn);
+
+//        back_btn = findViewById(R.id.back_btn);
         barcodeEt = findViewById(R.id.scan_barcode_et);
         barcodeEt.requestFocus();
 
-        String date  =  new
-                SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy" , Locale.getDefault()).format(new Date()).toString();
-        Log.e("date" , date);
+
 
 
         int hours = (int) TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
@@ -100,7 +107,7 @@ public class ScanActivity extends AppCompatActivity {
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 //        LocalDateTime localDate = LocalDateTime.parse(date, formatter);
 //        long timeInMilliseconds = localDate.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
-        attach_bt = findViewById(R.id.attach_btn);
+//        attach_bt = findViewById(R.id.attach_btn);
         scanRecyclerView = findViewById(R.id.scanrv);
 
 
@@ -123,14 +130,14 @@ public class ScanActivity extends AppCompatActivity {
         }
         getItemDetails();
 
-
-        attach_bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-         exportDB();
-
-            }
-        });
+//
+//        attach_bt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//         export();
+//
+//            }
+//        });
 
         barcodeEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -158,16 +165,34 @@ public class ScanActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+//        back_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
 
 
 
     }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu ,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if( id ==R.id.attach){
+              export();
+        }
+        return  true;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public  void insertDetials() {
         if(! barcodeEt.getText().toString().isEmpty()) {
@@ -178,7 +203,13 @@ public class ScanActivity extends AppCompatActivity {
             stockDetail.setQty(1);
             int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
             updateDate = seconds;
-            scanDate = seconds ;
+
+            String scanDateFormate  =  new
+                    SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy" , Locale.getDefault()).format(new Date()).toString();
+            String updateDateFormate  =  new
+                    SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy" , Locale.getDefault()).format(new Date()).toString();
+            String scanDate = scanDateFormate ;
+            stockDetail.setUpdateDateFormate(updateDateFormate);
             stockDetail.setScanDate(scanDate);
             stockDetail.setUpdateDate(updateDate);
 
@@ -232,69 +263,48 @@ public class ScanActivity extends AppCompatActivity {
     }
 
 
-    private void exportDB(){
 
 
-     try {
-         //saving the file into device
+    private void export(){
 
-         FileOutputStream out = openFileOutput("ma5zn.csv", Context.MODE_PRIVATE);
-         long docNo = stockCount_header.getDocumentNo();
-         List<StockDetail> stockDetailList = appDatabase.getInstance(getApplicationContext()).stockHeaderDao()
-                 .getStockDetialsByDate(docNo);
-         for( int i =0 ;  i<stockDetailList.size() ; i++)
-                {
-                    out.write( stockDetailList.get(i).getBarcode().getBytes());
-                    out.write((int) stockDetailList.get(i).getDocumentNumber());
-                    out.write((int) stockDetailList.get(i).getQty());
-                }
+        StringBuilder data  = new StringBuilder();
+        data.append("Barcode, Qty,Update Date   , SacnDate" );
+
+        for( int i =0 ; i<stockDetailList.size(); i++){
+//            data.append("\n"+ String.valueOf(i) + String.valueOf(stockDetailList.get(i).getBarcode()));
+
+            data.append("\n"+  String.valueOf(stockDetailList.get(i).getBarcode()) +","+
+                    String.valueOf(stockDetailList.get(i).getQty()) + ","+ String.valueOf(stockDetailList.get(i).getUpdateDateFormate())+ ","+ String.valueOf(stockDetailList.get(i).getScanDate()));
 
 
 
-         out.write(appDatabase.getInstance(getApplicationContext()).stockHeaderDao().getAllItemsDetials(docNo).toString().getBytes());
-//         out.write(database.itemDao().getAllItems().toString().getBytes());
+        }
+        try {
+             FileOutputStream outputStream  = openFileOutput("data.csv" ,Context.MODE_PRIVATE);
+            outputStream.write(data.toString().getBytes());
+            outputStream.close();
 
-         out.close();
+               //exporting
+            Context context = getApplicationContext();
+            File fileLocation = new File(getFilesDir() , "data.csv");
+            Uri path = FileProvider.getUriForFile(context, "com.nehad.wininventory.fileprovider", fileLocation);
+
+            Intent fileIntent = new Intent(Intent.ACTION_SEND);
+            fileIntent.setType("text/csv");
+            fileIntent.putExtra(Intent.EXTRA_SUBJECT, "Data");
+            fileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
 
-         Context context = getApplicationContext();
-         File filelocation = new File(getFilesDir(), "ma5zn.csv");
-         Uri path = FileProvider.getUriForFile(context, "com.nehad.wininventory.fileprovider", filelocation);
+            fileIntent.putExtra(Intent.EXTRA_STREAM, path);
+            startActivity(Intent.createChooser(fileIntent, "Send mail"));
 
-         //exporting
-         Intent fileIntent = new Intent(Intent.ACTION_SEND);
-         fileIntent.setType("text/csv");
-         fileIntent.putExtra(Intent.EXTRA_SUBJECT, "Data");
-         fileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-         fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }catch (Exception e){
 
+        }
 
-         fileIntent.putExtra(Intent.EXTRA_STREAM, path);
-         startActivity(Intent.createChooser(fileIntent, "Send mail"));
-     } catch (Exception e) {
-         e.printStackTrace();
-     }
-
-//        try {
-//            File csvfile = new File(Environment.getExternalStorageDirectory() + "/csvfile.csv");
-//            CSVReader reader = new CSVReader(new FileReader(csvfile.getAbsolutePath()));
-//            String[] nextLine;
-//            while ((nextLine = reader.readNext()) != null) {
-//                // nextLine[] is an array of values from the line
-//                System.out.println(nextLine[0] + nextLine[1] + "etc...");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-//        }
 
     }
-
-
-
-
-
-
 
 
     private void  getItemDetails(){

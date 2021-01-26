@@ -41,8 +41,12 @@ public class StockDetail implements Serializable{
 
 
     @ColumnInfo(name = "scanDate")
-    @TypeConverters({DateTypeConverter.class})
-    private int scanDate;
+    private String scanDate;
+
+
+    @ColumnInfo(name = "updateDateFormate")
+    private String updateDateFormate;
+
 
     @ColumnInfo(name = "updateDate")
     @TypeConverters({DateTypeConverter.class})
@@ -53,14 +57,23 @@ public class StockDetail implements Serializable{
 
     }
 
-    public StockDetail( @NonNull String barcode, long documentNumber, float qty, int scanDate, int updateDate) {
+
+    public StockDetail(@NonNull String barcode, long documentNumber, float qty, String scanDate, String updateDateFormate, int updateDate) {
         this.barcode = barcode;
         this.documentNumber = documentNumber;
         this.qty = qty;
         this.scanDate = scanDate;
+        this.updateDateFormate = updateDateFormate;
         this.updateDate = updateDate;
     }
 
+    public String getUpdateDateFormate() {
+        return updateDateFormate;
+    }
+
+    public void setUpdateDateFormate(String updateDateFormate) {
+        this.updateDateFormate = updateDateFormate;
+    }
 
     public long getId() {
         return id;
@@ -95,11 +108,11 @@ public class StockDetail implements Serializable{
         this.qty = qty;
     }
 
-    public int getScanDate() {
+    public String getScanDate() {
         return scanDate;
     }
 
-    public void setScanDate(int scanDate) {
+    public void setScanDate(String scanDate) {
         this.scanDate = scanDate;
     }
 

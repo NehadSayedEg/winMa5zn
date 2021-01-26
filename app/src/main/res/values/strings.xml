@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ma5zn</string>
+    <string name="app_name">Ma5zn Win</string>
 
 
     <string name="barcode_et">Enter Barcode</string>
@@ -10,10 +10,7 @@
     <string name="search_et">Search</string>
 
 
-
     <string name="sheetname_et">Sheet Name</string>
-
-
 
 
 </resources>

@@ -74,7 +74,21 @@ public class ScanAdapter   extends RecyclerView.Adapter<ScanAdapter.ScanViewHold
 
                 LinearLayout linearLayout = new LinearLayout(v.getContext());
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
+//                linearLayout.setPadding(10 ,10 , 10 , 10);
                 final EditText valueET = new EditText(v.getContext());
+
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.leftMargin= 10;
+                lp.rightMargin= 10;
+
+                valueET.setLayoutParams(lp);
+
+                valueET.setGravity(android.view.Gravity.TOP|android.view.Gravity.LEFT);
+                valueET.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                valueET.setLines(1);
+                valueET.setMaxLines(1);
+
+//                valueET.setText(lastDateValue);
                 valueET.setHint(" Enter the value to want to add ");
                 valueET.setInputType(InputType.TYPE_CLASS_NUMBER);
 

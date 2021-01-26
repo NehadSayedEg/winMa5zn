@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/sheet_background"
     android:orientation="vertical"
-    android:layout_margin="5dp"
+android:layout_marginTop="12dp"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     android:elevation="3dp"
@@ -24,7 +24,7 @@
         android:text="sheetName"
         android:includeFontPadding="false"
         android:fontFamily="@font/ubuntubold"
-        android:textColor="@color/color2"
+        android:textColor="@color/color01"
         android:textSize="12sp"
         android:layout_margin="@dimen/_5ssp"
         />
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="documentid "
-        android:textColor="@color/color2"
+        android:textColor="@color/color01"
         android:textSize="12sp"
         android:layout_margin="@dimen/_5ssp"
         />
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="documentDate"
-        android:textColor="@color/color2"
+        android:textColor="@color/color4"
         android:textSize="12sp"
         android:layout_margin="@dimen/_5ssp"
         />

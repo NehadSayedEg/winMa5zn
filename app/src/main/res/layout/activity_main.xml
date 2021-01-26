@@ -10,78 +10,48 @@
 
 
 
-    <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp"
-        app:layout_constraintTop_toTopOf="parent">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:padding="5dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
 
-        <EditText
-            android:id="@+id/barcode_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/rounded_et"
-            android:hint="@string/barcode_et"
-            android:inputType="text"
-            android:padding="5dp"
-            android:textColorHint="@color/color3" />
+<!--        <EditText-->
+<!--            android:id="@+id/barcode_et"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:background="@drawable/rounded_et"-->
+<!--            android:hint="@string/barcode_et"-->
+<!--            android:inputType="text"-->
+<!--            android:padding="5dp"-->
+<!--            android:textColorHint="@color/color3" />-->
 
-        <EditText
-            android:id="@+id/qty_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/rounded_et"
-            android:hint="@string/amount_et"
-            android:inputType="numberDecimal"
-            android:padding="5dp"
-            android:textColorHint="@color/color3" />
-
-
-        <LinearLayout
-            android:id="@+id/bnt_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/save_btn"
-                android:layout_width="80dp"
-                android:layout_margin="5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="15dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_btm"
-                android:padding="5dp"
-                android:text="@string/save_btn"
-                android:textColor="@color/offwhite"
-                android:textSize="15sp" />
+<!--        <EditText-->
+<!--            android:id="@+id/qty_et"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:background="@drawable/rounded_et"-->
+<!--            android:hint="@string/amount_et"-->
+<!--            android:inputType="numberDecimal"-->
+<!--            android:padding="5dp"-->
+<!--            android:textColorHint="@color/color3" />-->
 
 
-            <Button
-                android:id="@+id/clea_btn"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/round_color_btn"
-                android:padding="5dp"
-                android:text="@string/cancel_btn"
-                android:textColor="@color/offwhite"
-                android:textSize="15sp" />
-        </LinearLayout>
+<!--        <LinearLayout-->
+<!--            android:id="@+id/bnt_container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_margin="5dp"-->
+<!--0-->
 
-
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
 
 <!--    <androidx.core.widget.NestedScrollView-->
@@ -95,26 +65,26 @@
 <!--        app:layout_constraintTop_toBottomOf="@id/container">-->
 
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container"
-        app:layout_constraintVertical_bias="0.081">
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/container"-->
+<!--        app:layout_constraintVertical_bias="0.081">-->
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/rv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+<!--        </LinearLayout>-->
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 
 

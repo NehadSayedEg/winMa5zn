@@ -16,15 +16,28 @@
     android:padding="5dp">
 
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="@dimen/_20ssp"
+        android:layout_height="@dimen/_20ssp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/invoice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <TextView
         android:id="@+id/tvBarcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="9"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
         android:text="Barcode"
-        android:textColor="@color/color2"
+        android:textColor="@color/color01"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -32,88 +45,90 @@
         android:id="@+id/tvQty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="25dp"
         android:layout_weight="1"
         android:text="qty"
-        android:textColor="@color/color2"
+        android:textStyle="bold"
+        android:textColor="@color/color01"
         android:textSize="15sp"
-        android:layout_marginEnd="25dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="@+id/ivDec"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQty">
 
 
-        <ImageView
-            android:id="@+id/ivUpdate"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_baseline_language_24"
-            android:clickable="true"
-            android:focusable="true"
-            android:textSize="20sp"
-            android:clipToPadding="false"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toStartOf="@id/ivDec"
-            app:layout_constraintTop_toBottomOf="@+id/tvQty" />
+        <!--        <ImageView-->
+        <!--            android:id="@+id/ivUpdate"-->
+        <!--            android:layout_width="20dp"-->
+        <!--            android:layout_height="20dp"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            app:srcCompat="@drawable/ic_baseline_language_24"-->
+        <!--            android:clickable="true"-->
+        <!--            android:focusable="true"-->
+        <!--            android:textSize="20sp"-->
+        <!--            android:clipToPadding="false"-->
+        <!--            android:layout_marginEnd="10dp"-->
+        <!--            app:layout_constraintEnd_toStartOf="@id/ivDec"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/tvQty" />-->
         <ImageView
             android:id="@+id/ivDec"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            app:srcCompat="@drawable/minus"
+            android:layout_marginEnd="5dp"
             android:clickable="true"
+            android:clipToPadding="false"
             android:focusable="true"
             android:textSize="20sp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-
             app:layout_constraintStart_toEndOf="@+id/ivUpdate"
-            app:layout_constraintTop_toBottomOf="@+id/tvQty" />
+
+            app:layout_constraintTop_toBottomOf="@+id/tvQty"
+            app:srcCompat="@drawable/minus" />
 
         <ImageView
             android:id="@+id/ivInc"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/plus"
+            android:layout_marginEnd="10dp"
             android:clickable="true"
+            android:clipToPadding="false"
             android:focusable="true"
             android:textSize="20sp"
-            android:clipToPadding="false"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvQty" />
-
+            app:layout_constraintTop_toBottomOf="@+id/tvQty"
+            app:srcCompat="@drawable/plus" />
 
 
     </LinearLayout>
-
 
     <ImageView
         android:id="@+id/ivDeleteScan"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="4dp"
         android:clickable="true"
-        android:focusable="true"
         android:clipToPadding="false"
-        app:srcCompat="@drawable/delete"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBarcode" />
-
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/tvBarcode"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/delete" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
